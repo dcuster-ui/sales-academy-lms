@@ -92,6 +92,7 @@ def init_db():
             display_order INTEGER DEFAULT 0,
             is_required INTEGER DEFAULT 0,
             week_available INTEGER,
+            schedule_day INTEGER,
             created_at TEXT DEFAULT (datetime('now')),
             updated_at TEXT DEFAULT (datetime('now'))
         );

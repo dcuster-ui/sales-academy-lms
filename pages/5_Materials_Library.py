@@ -20,7 +20,7 @@ user_id = get_current_user_id()
 role = get_current_role()
 
 st.markdown("### Materials Library")
-st.caption("Training decks, video modules, and supporting resources organized by category.")
+st.caption("Training decks, video modules, and supporting resources.")
 
 # ── Admin: rep selector to manage completion on behalf of reps ────────────
 view_user_id = user_id  # default: viewing own progress
@@ -55,11 +55,13 @@ if role == "rep" or view_user_name:
     label = f"{view_user_name}: " if view_user_name else ""
     st.progress(done / max(total, 1), text=f"{label}{done}/{total} materials completed")
 
-# Filters
-col1, col2 = st.columns([2, 1])
-with col1:
+# View toggle and filters
+col_view, col_search, col_type = st.columns([1, 2, 1])
+with col_view:
+    view_by = st.radio("View by", options=["Schedule Day", "Category"], horizontal=True, key="mat_view_by")
+with col_search:
     search = st.text_input("Search materials", placeholder="Type to filter...")
-with col2:
+with col_type:
     type_filter = st.multiselect("Material type", options=["deck", "video", "document", "link", "other"], default=[])
 
 # Get materials with progress for the selected user
@@ -71,84 +73,125 @@ if search:
 if type_filter:
     materials = [m for m in materials if m["material_type"] in type_filter]
 
-# Group by category
-by_category = defaultdict(list)
-for m in materials:
-    by_category[m["category_name"]].append(m)
-
 # Determine if the current view allows completion toggling
 can_toggle = role in ("rep", "manager") or (is_admin() and view_user_name is not None)
 
-if not by_category:
+# Day labels for schedule view
+DAY_LABELS = {
+    1: "Day 1 — Welcome & Orientation",
+    2: "Day 2 — Sales Process, Front End & TUIT",
+    3: "Day 3 — Objection Handling, Gatekeepers & Appointment Setting",
+    4: "Day 4 — Promotional Programs, AIDG & Presentation",
+    5: "Day 5 — Presentation OH, Merchant Center & SalesloftCX",
+    6: "Day 6 — Conversation Cards & Value Props",
+    7: "Day 7 — Lead Gen & Tools",
+    8: "Day 8 — Call Shadowing & Tools",
+    9: "Day 9 — 30-Second Commercial & Deep Dives",
+    10: "Day 10 — Full Call Block Day",
+    11: "Week 3 — Post Close Process",
+    12: "Week 3 — Deal Stage & Pipeline",
+    16: "Week 4 — Payment Terms",
+    17: "Week 4 — Lead Sourcing",
+    18: "Week 4 — Information Requests & Cases",
+    21: "Week 5 — 3PIP Overview",
+}
+
+
+def render_material(m):
+    """Render a single material row with open/toggle/edit controls."""
+    icon = {"deck": "📊", "video": "🎬", "document": "📄", "link": "🔗", "other": "📁"}.get(m["material_type"], "📁")
+
+    if is_admin():
+        c1, c2, c3, c4 = st.columns([4, 1, 1, 1])
+    else:
+        c1, c2, c3 = st.columns([4, 1, 1])
+
+    with c1:
+        st.markdown(f"{icon} **{m['title']}**")
+        if m.get("description"):
+            st.caption(m["description"])
+        type_label = m["material_type"].title()
+        cat_label = f" | {m['category_name']}" if view_by == "Schedule Day" else ""
+        link_status = "" if m.get("url") else " | **No link**"
+        st.caption(f"{type_label}{cat_label}{link_status}")
+
+    with c2:
+        if m.get("url"):
+            st.link_button("Open", m["url"], use_container_width=True)
+        elif not is_admin():
+            st.caption("No link yet")
+
+    with c3:
+        if can_toggle:
+            is_done = m["progress_status"] == "completed"
+            if st.checkbox(
+                "Done" if is_done else "Mark done",
+                value=is_done,
+                key=f"mat_{m['id']}_{view_user_id}",
+            ):
+                if not is_done:
+                    mark_material_complete(view_user_id, m["id"])
+                    st.rerun()
+            else:
+                if is_done:
+                    mark_material_incomplete(view_user_id, m["id"])
+                    st.rerun()
+
+    # Admin: inline edit link
+    if is_admin():
+        with c4:
+            if st.button("Edit", key=f"edit_{m['id']}", use_container_width=True):
+                st.session_state[f"editing_mat_{m['id']}"] = True
+
+        if st.session_state.get(f"editing_mat_{m['id']}"):
+            with st.form(f"edit_form_{m['id']}"):
+                new_url = st.text_input("URL (Google Drive / YouTube link)", value=m.get("url") or "", key=f"url_{m['id']}")
+                new_desc = st.text_input("Description", value=m.get("description") or "", key=f"desc_{m['id']}")
+                ecol1, ecol2 = st.columns(2)
+                with ecol1:
+                    if st.form_submit_button("Save", type="primary"):
+                        execute(
+                            "UPDATE materials SET url = ?, description = ? WHERE id = ?",
+                            (new_url or None, new_desc or None, m["id"]),
+                        )
+                        st.session_state.pop(f"editing_mat_{m['id']}", None)
+                        st.rerun()
+                with ecol2:
+                    if st.form_submit_button("Cancel"):
+                        st.session_state.pop(f"editing_mat_{m['id']}", None)
+                        st.rerun()
+
+
+if not materials:
     st.info("No materials match your filters.")
+elif view_by == "Schedule Day":
+    # Group by schedule_day
+    by_day = defaultdict(list)
+    for m in materials:
+        day = m.get("schedule_day") or 0
+        by_day[day].append(m)
+
+    for day_num in sorted(by_day.keys()):
+        items = by_day[day_num]
+        completed = sum(1 for m in items if m["progress_status"] == "completed")
+        label = DAY_LABELS.get(day_num, f"Day {day_num}")
+
+        with st.expander(f"**{label}** — {completed}/{len(items)} completed", expanded=(day_num <= 2)):
+            for m in items:
+                render_material(m)
 else:
+    # Group by category (original view)
+    by_category = defaultdict(list)
+    for m in materials:
+        by_category[m["category_name"]].append(m)
+
     for cat_name in sorted(by_category.keys(), key=lambda x: by_category[x][0]["cat_order"]):
         items = by_category[cat_name]
         completed = sum(1 for m in items if m["progress_status"] == "completed")
 
         with st.expander(f"**{cat_name}** — {completed}/{len(items)} completed", expanded=False):
             for m in items:
-                icon = {"deck": "📊", "video": "🎬", "document": "📄", "link": "🔗", "other": "📁"}.get(m["material_type"], "📁")
-
-                if is_admin():
-                    col1, col2, col3, col4 = st.columns([4, 1, 1, 1])
-                else:
-                    col1, col2, col3 = st.columns([4, 1, 1])
-
-                with col1:
-                    st.markdown(f"{icon} **{m['title']}**")
-                    if m.get("description"):
-                        st.caption(m["description"])
-                    type_label = m["material_type"].title()
-                    week_label = f" | Available: Week {m['week_available']}" if m.get("week_available") else ""
-                    link_status = "" if m.get("url") else " | **No link**"
-                    st.caption(f"Type: {type_label}{week_label}{link_status}")
-
-                with col2:
-                    if m.get("url"):
-                        st.link_button("Open", m["url"], use_container_width=True)
-                    elif not is_admin():
-                        st.caption("No link yet")
-
-                with col3:
-                    if can_toggle:
-                        is_done = m["progress_status"] == "completed"
-                        if st.checkbox(
-                            "Done" if is_done else "Mark done",
-                            value=is_done,
-                            key=f"mat_{m['id']}_{view_user_id}",
-                        ):
-                            if not is_done:
-                                mark_material_complete(view_user_id, m["id"])
-                                st.rerun()
-                        else:
-                            if is_done:
-                                mark_material_incomplete(view_user_id, m["id"])
-                                st.rerun()
-
-                # Admin: inline edit link
-                if is_admin():
-                    with col4:
-                        if st.button("Edit", key=f"edit_{m['id']}", use_container_width=True):
-                            st.session_state[f"editing_mat_{m['id']}"] = True
-
-                    if st.session_state.get(f"editing_mat_{m['id']}"):
-                        with st.form(f"edit_form_{m['id']}"):
-                            new_url = st.text_input("URL (Google Drive / YouTube link)", value=m.get("url") or "", key=f"url_{m['id']}")
-                            new_desc = st.text_input("Description", value=m.get("description") or "", key=f"desc_{m['id']}")
-                            ecol1, ecol2 = st.columns(2)
-                            with ecol1:
-                                if st.form_submit_button("Save", type="primary"):
-                                    execute(
-                                        "UPDATE materials SET url = ?, description = ? WHERE id = ?",
-                                        (new_url or None, new_desc or None, m["id"]),
-                                    )
-                                    st.session_state.pop(f"editing_mat_{m['id']}", None)
-                                    st.rerun()
-                            with ecol2:
-                                if st.form_submit_button("Cancel"):
-                                    st.session_state.pop(f"editing_mat_{m['id']}", None)
-                                    st.rerun()
+                render_material(m)
 
 # Admin: Add Material
 if is_admin():

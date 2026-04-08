@@ -182,65 +182,62 @@ def seed_all(conn):
     _DOC = "https://docs.google.com/document/d/"     # doc prefix
 
     materials_data = [
-        # (title, type, category_id, week_available, url)
-        # Sales Process (Pre-Close)
-        ("Sales Process Overview", "deck", cat_ids["Sales Process (Pre-Close)"], 1, _SP + "14p6bicNyUES4GtH10G9W9MNzpo88bDjP"),
-        ("Front End", "deck", cat_ids["Sales Process (Pre-Close)"], 1, _SP + "1JWRHAUVuRA51Pha3qQkSyjj2w8lbMGVf"),
-        ("TUIT & Needs Assessment", "deck", cat_ids["Sales Process (Pre-Close)"], 1, _SP + "1WgotCyXkbk_oLfgroLJNbWd4G8vRfhVq"),
-        ("Presentation: The What and The How", "deck", cat_ids["Sales Process (Pre-Close)"], 1, _SP + "1bAs-IvNQ34lWQrAePYqRlItId_ydu2Kx"),
-        ("Promotional Programs", "deck", cat_ids["Sales Process (Pre-Close)"], 2, _SP + "1vFYADvJHRkJmYrYLVfwCj4ac6pqQSS79"),
-        ("Working with Gatekeepers", "deck", cat_ids["Sales Process (Pre-Close)"], 2, _SP + "1coF65lhqZTNxNbRKrqtdXtKP8ZpFJdpi"),
-        ("Appointment Setting", "deck", cat_ids["Sales Process (Pre-Close)"], 1, _SP + "1XAa2EgoPUhcRe0shEagS07z7FMRPhIhs"),
-        ("Merchant Center", "deck", cat_ids["Sales Process (Pre-Close)"], 2, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
-        ("Sales Process Overview", "video", cat_ids["Sales Process (Pre-Close)"], 1, _SP + "14p6bicNyUES4GtH10G9W9MNzpo88bDjP"),
-        ("Front End", "video", cat_ids["Sales Process (Pre-Close)"], 1, _SP + "1JWRHAUVuRA51Pha3qQkSyjj2w8lbMGVf"),
-        ("TUIT & Needs Assessment", "video", cat_ids["Sales Process (Pre-Close)"], 1, _SP + "1WgotCyXkbk_oLfgroLJNbWd4G8vRfhVq"),
-        ("Working with Gatekeepers", "video", cat_ids["Sales Process (Pre-Close)"], 2, _SP + "1coF65lhqZTNxNbRKrqtdXtKP8ZpFJdpi"),
-        ("Appointment Setting", "video", cat_ids["Sales Process (Pre-Close)"], 1, _SP + "1XAa2EgoPUhcRe0shEagS07z7FMRPhIhs"),
-        # Objection Handling
-        ("Objection Handling: Front End", "deck", cat_ids["Objection Handling"], 1, _SP + "1mRJ93772Q3rW5B3vbXJctfVj6MQW0aIT"),
-        ("Objection Handling: Needs Assessment", "deck", cat_ids["Objection Handling"], 2, _SP + "1QI7adBaOQUZ3kka24t73SLBkX8KXkXDP"),
-        ("Objection Handling: Presentation", "deck", cat_ids["Objection Handling"], 2, _SP + "1_qtYYrLGXvObOIw30MAkJm1ktmZxWx_6"),
-        ("Objection Handling: Front End", "video", cat_ids["Objection Handling"], 1, _SP + "1mRJ93772Q3rW5B3vbXJctfVj6MQW0aIT"),
-        ("Objection Handling: Needs Assessment", "video", cat_ids["Objection Handling"], 2, _SP + "1QI7adBaOQUZ3kka24t73SLBkX8KXkXDP"),
-        ("Objection Handling: Presentation", "video", cat_ids["Objection Handling"], 2, _SP + "1_qtYYrLGXvObOIw30MAkJm1ktmZxWx_6"),
-        # Conversation Cards
-        ("BD Conversation Card - Full Version", "deck", cat_ids["Conversation Cards"], 2, _SP + "1EeeRMe5wKoO7Q0V-M-B8eUYDz1VmCP2M"),
-        ("BD Conversation Card - Short Version", "deck", cat_ids["Conversation Cards"], 2, _SP + "1EeeRMe5wKoO7Q0V-M-B8eUYDz1VmCP2M"),
-        # Groupon
-        ("Welcome / SIP & BD Expectations", "deck", cat_ids["Groupon"], 1, _SP + "1qkszJreCAIwwkpj49KC-DWjhEOE2uf88"),
-        ("Groupon Platform", "deck", cat_ids["Groupon"], 1, _SP + "1dGuZ3H90ZfCquEjBpXEWGND0kBHdTsPe"),
-        ("Industry Education", "deck", cat_ids["Groupon"], 1, _SP + "1nzASPAY2IoCxdiubuvyL3u1plUYx-0Mv"),
-        # Market Management
-        ("Merchant Quality & Deal Structure Overview", "deck", cat_ids["Market Management"], 2, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
-        # Pipeline Process
-        ("Deal Stage Breakdown for Success", "deck", cat_ids["Pipeline Process"], 3, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
-        ("Lead Sourcing and Creation", "deck", cat_ids["Pipeline Process"], 3, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
-        # Sales Process (Post Close)
-        ("Post Close Process", "deck", cat_ids["Sales Process (Post Close)"], 4, _SP + "1-5Xq_SEt9bgZbABFsm_uJit77LFqVGjE"),
-        ("Post-Close Tasks: Gemini Deal Edits", "deck", cat_ids["Sales Process (Post Close)"], 4, _SP + "1-5Xq_SEt9bgZbABFsm_uJit77LFqVGjE"),
-        ("Information Requests & Cases", "deck", cat_ids["Sales Process (Post Close)"], 4, _SP + "1-5Xq_SEt9bgZbABFsm_uJit77LFqVGjE"),
-        ("Payment Terms", "deck", cat_ids["Sales Process (Post Close)"], 4, _SP + "1n8ClJoatvlBkLWwc-qUhbkdtkIHU0zaq"),
-        # Tooling
-        ("Organizing for Success", "deck", cat_ids["Tooling"], 1, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
-        ("DCT Guide for Sales - Unified Flow", "document", cat_ids["Tooling"], 2, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
-        ("Zingtree - One Pager", "document", cat_ids["Tooling"], 2, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
-        ("Coffee To Go", "deck", cat_ids["Tooling"], 2, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
-        ("Salesloft User Guide", "deck", cat_ids["Tooling"], 2, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
-        ("Navigating Salesforce", "deck", cat_ids["Tooling"], 1, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
-        ("AIDG - Guide for Sales", "document", cat_ids["Tooling"], 3, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
-        # 3PIP
-        ("3PIP Overview for TTD Sales", "deck", cat_ids["3PIP"], 4, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
-        ("3PIP Overview for TTD Sales", "video", cat_ids["3PIP"], 4, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
-        # SOP
-        ("BD Instruction Manual", "document", cat_ids["SOP"], 1, _DOC + "1PU_HjFXnVIGCIZHFYfSzaLGcAavGlJz0vUq8x7h0oP0/edit"),
+        # (title, type, category_id, week, schedule_day, url)
+        # Day 1: Welcome, Groupon overview, orientation
+        ("Welcome / SIP & BD Expectations", "deck", cat_ids["Groupon"], 1, 1, _SP + "1qkszJreCAIwwkpj49KC-DWjhEOE2uf88"),
+        ("Organizing for Success", "deck", cat_ids["Tooling"], 1, 1, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
+        ("Groupon Platform", "deck", cat_ids["Groupon"], 1, 1, _SP + "1dGuZ3H90ZfCquEjBpXEWGND0kBHdTsPe"),
+        ("Industry Education", "deck", cat_ids["Groupon"], 1, 1, _SP + "1nzASPAY2IoCxdiubuvyL3u1plUYx-0Mv"),
+        ("BD Instruction Manual", "document", cat_ids["SOP"], 1, 1, _DOC + "1PU_HjFXnVIGCIZHFYfSzaLGcAavGlJz0vUq8x7h0oP0/edit"),
+        # Day 2: Sales Process, Front End, TUIT, Front End OH
+        ("Sales Process Overview", "deck", cat_ids["Sales Process (Pre-Close)"], 1, 2, _SP + "14p6bicNyUES4GtH10G9W9MNzpo88bDjP"),
+        ("Sales Process Overview", "video", cat_ids["Sales Process (Pre-Close)"], 1, 2, _SP + "14p6bicNyUES4GtH10G9W9MNzpo88bDjP"),
+        ("Front End", "deck", cat_ids["Sales Process (Pre-Close)"], 1, 2, _SP + "1JWRHAUVuRA51Pha3qQkSyjj2w8lbMGVf"),
+        ("Front End", "video", cat_ids["Sales Process (Pre-Close)"], 1, 2, _SP + "1JWRHAUVuRA51Pha3qQkSyjj2w8lbMGVf"),
+        ("TUIT & Needs Assessment", "deck", cat_ids["Sales Process (Pre-Close)"], 1, 2, _SP + "1WgotCyXkbk_oLfgroLJNbWd4G8vRfhVq"),
+        ("TUIT & Needs Assessment", "video", cat_ids["Sales Process (Pre-Close)"], 1, 2, _SP + "1WgotCyXkbk_oLfgroLJNbWd4G8vRfhVq"),
+        ("Objection Handling: Front End", "deck", cat_ids["Objection Handling"], 1, 2, _SP + "1mRJ93772Q3rW5B3vbXJctfVj6MQW0aIT"),
+        ("Objection Handling: Front End", "video", cat_ids["Objection Handling"], 1, 2, _SP + "1mRJ93772Q3rW5B3vbXJctfVj6MQW0aIT"),
+        # Day 3: TUIT OH, Appointment Setting, Gatekeepers, Salesloft, Salesforce
+        ("Objection Handling: Needs Assessment", "deck", cat_ids["Objection Handling"], 1, 3, _SP + "1QI7adBaOQUZ3kka24t73SLBkX8KXkXDP"),
+        ("Objection Handling: Needs Assessment", "video", cat_ids["Objection Handling"], 1, 3, _SP + "1QI7adBaOQUZ3kka24t73SLBkX8KXkXDP"),
+        ("Appointment Setting", "deck", cat_ids["Sales Process (Pre-Close)"], 1, 3, _SP + "1XAa2EgoPUhcRe0shEagS07z7FMRPhIhs"),
+        ("Appointment Setting", "video", cat_ids["Sales Process (Pre-Close)"], 1, 3, _SP + "1XAa2EgoPUhcRe0shEagS07z7FMRPhIhs"),
+        ("Working with Gatekeepers", "deck", cat_ids["Sales Process (Pre-Close)"], 1, 3, _SP + "1coF65lhqZTNxNbRKrqtdXtKP8ZpFJdpi"),
+        ("Working with Gatekeepers", "video", cat_ids["Sales Process (Pre-Close)"], 1, 3, _SP + "1coF65lhqZTNxNbRKrqtdXtKP8ZpFJdpi"),
+        ("Navigating Salesforce", "deck", cat_ids["Tooling"], 1, 3, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
+        ("Salesloft User Guide", "deck", cat_ids["Tooling"], 1, 3, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
+        ("Merchant Quality & Deal Structure Overview", "deck", cat_ids["Market Management"], 1, 3, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
+        # Day 4: Promotional Programs, Deal Structure, AIDG, Presentation
+        ("Promotional Programs", "deck", cat_ids["Sales Process (Pre-Close)"], 1, 4, _SP + "1vFYADvJHRkJmYrYLVfwCj4ac6pqQSS79"),
+        ("AIDG - Guide for Sales", "document", cat_ids["Tooling"], 1, 4, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
+        ("Presentation: The What and The How", "deck", cat_ids["Sales Process (Pre-Close)"], 1, 4, _SP + "1bAs-IvNQ34lWQrAePYqRlItId_ydu2Kx"),
+        # Day 5: Presentation OH, Merchant Center, SalesloftCX
+        ("Objection Handling: Presentation", "deck", cat_ids["Objection Handling"], 1, 5, _SP + "1_qtYYrLGXvObOIw30MAkJm1ktmZxWx_6"),
+        ("Objection Handling: Presentation", "video", cat_ids["Objection Handling"], 1, 5, _SP + "1_qtYYrLGXvObOIw30MAkJm1ktmZxWx_6"),
+        ("Merchant Center", "deck", cat_ids["Sales Process (Pre-Close)"], 1, 5, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
+        ("Coffee To Go", "deck", cat_ids["Tooling"], 1, 5, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
+        # Days 6-10 (Week 2): Conversation Cards, deep dives, call blocks
+        ("BD Conversation Card - Full Version", "deck", cat_ids["Conversation Cards"], 2, 6, _SP + "1EeeRMe5wKoO7Q0V-M-B8eUYDz1VmCP2M"),
+        ("BD Conversation Card - Short Version", "deck", cat_ids["Conversation Cards"], 2, 6, _SP + "1EeeRMe5wKoO7Q0V-M-B8eUYDz1VmCP2M"),
+        ("DCT Guide for Sales - Unified Flow", "document", cat_ids["Tooling"], 2, 7, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
+        ("Zingtree - One Pager", "document", cat_ids["Tooling"], 2, 8, _SP + "1dASxvGfAg-5IkrVhu77ZNgwt-_6C3Tzh"),
+        # Weeks 3-6: Post Close, Pipeline, 3PIP
+        ("Post Close Process", "deck", cat_ids["Sales Process (Post Close)"], 3, 11, _SP + "1-5Xq_SEt9bgZbABFsm_uJit77LFqVGjE"),
+        ("Post-Close Tasks: Gemini Deal Edits", "deck", cat_ids["Sales Process (Post Close)"], 3, 11, _SP + "1-5Xq_SEt9bgZbABFsm_uJit77LFqVGjE"),
+        ("Deal Stage Breakdown for Success", "deck", cat_ids["Pipeline Process"], 3, 12, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
+        ("Payment Terms", "deck", cat_ids["Sales Process (Post Close)"], 4, 16, _SP + "1n8ClJoatvlBkLWwc-qUhbkdtkIHU0zaq"),
+        ("Lead Sourcing and Creation", "deck", cat_ids["Pipeline Process"], 4, 17, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
+        ("Information Requests & Cases", "deck", cat_ids["Sales Process (Post Close)"], 4, 18, _SP + "1-5Xq_SEt9bgZbABFsm_uJit77LFqVGjE"),
+        ("3PIP Overview for TTD Sales", "deck", cat_ids["3PIP"], 5, 21, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
+        ("3PIP Overview for TTD Sales", "video", cat_ids["3PIP"], 5, 21, _SP + "131Wn590U5Ey9XCoEuvD0_s5g1Gx3knSG"),
     ]
 
-    for title, mtype, cat_id, week, url in materials_data:
+    for title, mtype, cat_id, week, day, url in materials_data:
         cursor.execute(
-            """INSERT INTO materials (category_id, title, material_type, url, week_available, is_required)
-               VALUES (?, ?, ?, ?, ?, 1)""",
-            (cat_id, title, mtype, url, week),
+            """INSERT INTO materials (category_id, title, material_type, url, week_available, schedule_day, is_required)
+               VALUES (?, ?, ?, ?, ?, ?, 1)""",
+            (cat_id, title, mtype, url, week, day),
         )
 
     # --- Performance Metrics (real BD tracker data from Keboola/BigQuery) ---
