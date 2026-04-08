@@ -6,23 +6,30 @@ def seed_all(conn):
     cursor = conn.cursor()
 
     # --- Users ---
-    # Admin
-    cursor.execute(
-        "INSERT INTO users (email, full_name, role) VALUES (?, ?, ?)",
-        ("training@groupon.com", "Training Admin", "admin"),
-    )
-    admin_id = cursor.lastrowid
+    # Admins (training team)
+    admin_users = [
+        ("dcuster@groupon.com", "Dani Langan"),
+        ("ghooper@groupon.com", "Geoff Hooper"),
+        ("rmoreno@groupon.com", "Raquel Moreno"),
+        ("cneuendorf@groupon.com", "Chad Neuendorf"),
+    ]
+    for email, name in admin_users:
+        cursor.execute(
+            "INSERT INTO users (email, full_name, role) VALUES (?, ?, ?)",
+            (email, name, "admin"),
+        )
+    admin_id = 1  # Dani Langan
 
-    # Managers
+    # Managers (also have admin access)
     cursor.execute(
         "INSERT INTO users (email, full_name, role) VALUES (?, ?, ?)",
-        ("mjose@groupon.com", "Max Josef", "manager"),
+        ("mjosef@groupon.com", "Max Josef", "admin"),
     )
     manager_josef_id = cursor.lastrowid
 
     cursor.execute(
         "INSERT INTO users (email, full_name, role) VALUES (?, ?, ?)",
-        ("jwalton@groupon.com", "Jamere Walton", "manager"),
+        ("jawalton@groupon.com", "Jamere Walton", "admin"),
     )
     manager_walton_id = cursor.lastrowid
 
