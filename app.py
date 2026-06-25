@@ -44,4 +44,4 @@ require_auth()
 render_sidebar()
 
 # Redirect to dashboard
-st.switch_page("pages/1_Dashboard.py")
+st.switch_page("pages/1_My_Path.py")

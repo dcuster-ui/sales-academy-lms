@@ -74,60 +74,48 @@ def init_db():
             created_at TEXT DEFAULT (datetime('now'))
         );
 
-        CREATE TABLE IF NOT EXISTS material_categories (
+        CREATE TABLE IF NOT EXISTS modules (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL UNIQUE,
-            display_order INTEGER DEFAULT 0,
-            parent_id INTEGER REFERENCES material_categories(id)
-        );
-
-        CREATE TABLE IF NOT EXISTS materials (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            category_id INTEGER NOT NULL REFERENCES material_categories(id),
+            slug TEXT NOT NULL UNIQUE,
             title TEXT NOT NULL,
-            material_type TEXT NOT NULL CHECK(material_type IN ('deck','video','document','link','other')),
-            url TEXT,
             description TEXT,
-            duration_minutes INTEGER,
             display_order INTEGER DEFAULT 0,
-            is_required INTEGER DEFAULT 0,
-            week_available INTEGER,
-            schedule_day INTEGER,
-            created_at TEXT DEFAULT (datetime('now')),
-            updated_at TEXT DEFAULT (datetime('now'))
+            week_target INTEGER,
+            vertical TEXT,
+            is_required INTEGER DEFAULT 1,
+            is_active INTEGER DEFAULT 1
         );
 
-        CREATE TABLE IF NOT EXISTS material_progress (
+        CREATE TABLE IF NOT EXISTS app_config (
+            key TEXT PRIMARY KEY,
+            value TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS user_preferences (
+            user_id INTEGER PRIMARY KEY REFERENCES users(id),
+            vertical TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS lessons (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            module_id INTEGER NOT NULL REFERENCES modules(id),
+            slug TEXT NOT NULL,
+            title TEXT NOT NULL,
+            display_order INTEGER DEFAULT 0,
+            content_type TEXT NOT NULL CHECK(content_type IN ('html','video','link','doc')),
+            content_body TEXT,
+            url TEXT,
+            est_minutes INTEGER,
+            UNIQUE(module_id, slug)
+        );
+
+        CREATE TABLE IF NOT EXISTS lesson_progress (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL REFERENCES users(id),
-            material_id INTEGER NOT NULL REFERENCES materials(id),
+            lesson_id INTEGER NOT NULL REFERENCES lessons(id),
             status TEXT DEFAULT 'not_started' CHECK(status IN ('not_started','in_progress','completed')),
             completed_at TEXT,
-            UNIQUE(user_id, material_id)
-        );
-
-        CREATE TABLE IF NOT EXISTS performance_metrics (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL REFERENCES users(id),
-            cohort_id INTEGER NOT NULL REFERENCES cohorts(id),
-            report_week TEXT NOT NULL,
-            dials INTEGER DEFAULT 0,
-            solid_calls INTEGER DEFAULT 0,
-            connected INTEGER DEFAULT 0,
-            dm_connect INTEGER DEFAULT 0,
-            appointments_set INTEGER DEFAULT 0,
-            needs_assessment INTEGER DEFAULT 0,
-            presentations INTEGER DEFAULT 0,
-            close_won INTEGER DEFAULT 0,
-            um_closed INTEGER DEFAULT 0,
-            um_launched INTEGER DEFAULT 0,
-            gp_amount REAL DEFAULT 0,
-            pipeline_value REAL DEFAULT 0,
-            revenue REAL DEFAULT 0,
-            notes TEXT,
-            entered_by INTEGER REFERENCES users(id),
-            created_at TEXT DEFAULT (datetime('now')),
-            UNIQUE(user_id, report_week)
+            UNIQUE(user_id, lesson_id)
         );
 
         CREATE TABLE IF NOT EXISTS activity_log (
